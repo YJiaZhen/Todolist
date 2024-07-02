@@ -1,18 +1,18 @@
 import React from "react";
 import "./HelloWorld.css";
 
-const TodoItem = ({ t, onUpdate, onDelete }) => {
+const TodoItem = ({ todo, onUpdate, onDelete }) => {
   const handleUpdateClick = () => {
-    onUpdate(t.id);
+    onUpdate(todo.id);
   };
 
   const handleDeleteClick = () => {
-    onDelete(t.id);
+    onDelete(todo.id);
   };
 
   return (
     <div className="singleTodoTask">
-      <span className="toDoText">{t.inputToDo}</span>
+      <span className="toDoText">{todo.inputToDo}</span>
       <button type="button" onClick={handleUpdateClick}>
         Update
       </button>

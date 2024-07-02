@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./HelloWorld.css";
 import TodoItem from "./TodoItem";
 
@@ -9,6 +9,20 @@ const HelloWorld = () => {
   const [toDoList, setToDoList] = useState([]);
   // 確認我們待辦事項的編輯狀態，初始Id為0
   const [updateId, setUpdateId] = useState(0);
+  
+  useEffect(() => {
+    // 從localStorage中讀取待辦事項列表
+    const savedToDoList = JSON.parse(localStorage.getItem("toDoList"));
+    if (savedToDoList) {
+      setToDoList(savedToDoList);
+    }
+  }, []);
+
+  useEffect(() => {
+    // 將待辦事項列表存入localStorage
+    localStorage.setItem("toDoList", JSON.stringify(toDoList));
+  }, [toDoList]);
+
   // 新增待辦事項的按鈕函數
   const handleSubmit = (e) => {
     // 當我們點選Add按紐時handleSubmit會被觸發
@@ -69,9 +83,11 @@ const HelloWorld = () => {
   // updateTodo是一個object裡面包含一個id和一個To-Do
   const handleUpdate = (id) => {
     const updateToDo = toDoList.find((i) => i.id === id);
-    setInputToDo(updateToDo.inpuToDo);
+    setInputToDo(updateToDo.inputToDo);
     setUpdateId(id);
   };
+
+
 
   return (
     <div className="App">
@@ -91,10 +107,10 @@ const HelloWorld = () => {
         </form>
         {/* 待辦清單顯示內容，t代表整個對象為輸入框內的inpuiToDo值 */}
         <ul className="allToDoList">
-          {toDoList.map((t) => (
-            <li className="singleTodoTask">
+          {toDoList.map((todo) => (
+            <li className="singleTodoTask" key={todo.id}>
               <TodoItem 
-                t={t} 
+                todo={todo} 
                 onUpdate={handleUpdate} 
                 onDelete={handleDelete} 
               />
