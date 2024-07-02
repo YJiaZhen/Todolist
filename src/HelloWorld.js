@@ -11,6 +11,7 @@ const HelloWorld = () => {
   const [updateId, setUpdateId] = useState(0);
   
   useEffect(() => {
+    console.log('here',Date.now)
     // 從localStorage中讀取待辦事項列表
     const savedToDoList = JSON.parse(localStorage.getItem("toDoList"));
     if (savedToDoList) {
@@ -18,43 +19,53 @@ const HelloWorld = () => {
     }
   }, []);
 
-  useEffect(() => {
-    // 將待辦事項列表存入localStorage
-    localStorage.setItem("toDoList", JSON.stringify(toDoList));
-  }, [toDoList]);
+  // useEffect(() => {
+  //   // 將待辦事項列表存入localStorage
+  //   localStorage.setItem("toDoList", JSON.stringify(toDoList));
+  // }, [toDoList]);
 
   // 新增待辦事項的按鈕函數
   const handleSubmit = (e) => {
     // 當我們點選Add按紐時handleSubmit會被觸發
     // 我們不希望它刷新頁面
     e.preventDefault();
+    let newItems
     if (updateId) {
+      console.log('@')
       // 要用找到的id內的值回傳到輸入框並來編輯它
       // 先確認跟我們要尋找的Id是否相符
       // 它會詢問我們正在嘗試更新的待辦事項
       // 如果"是"已更新的，我們提供原始的Id並執行Input寫入的任何內容
       // 如果"不是"，我們就提供它的默認值
       const updateToDo = toDoList.find((i) => i.id === updateId);
-      const updatedToDoList = toDoList.map((t) =>
-        t.id === updateToDo.id
-          ? (t = { id: t.id, inputToDo })
-          : { id: t.id, inputToDo: t.inputToDo }
+      newItems = toDoList.map((todo) =>
+        todo.id === updateToDo.id
+          ? (todo = { id: todo.id, inputToDo })
+          : { id: todo.id, inputToDo: todo.inputToDo }
       );
-      setToDoList(updatedToDoList);
+
       setUpdateId(0);
       setInputToDo("");
-      return;
     }
     // 只要inputToDo裡面不是空字串
     // 就會創建新的To-Do List
     if (inputToDo !== "") {
-      setToDoList([
+      console.log('#')
+      newItems = [
         { id: `${inputToDo}-${Date.now()}`, inputToDo },
         ...toDoList,
-      ]);
+      ]
+      console.log('newItems',newItems);
+      // setToDoList(newItems);
+      
+      // localStorage.setItem("toDoList", JSON.stringify(newItems));
+ 
+
       // 輸入框新增按鈕送出後輸入框內的文字為空，記得下方input要寫value={inputToDo}
       setInputToDo("");
     }
+    setToDoList(newItems);
+    localStorage.setItem("toDoList", JSON.stringify(newItems));
   };
   // 控制delete按鈕的函式
   // 將delete裡面的所有東西都做變量
@@ -68,6 +79,7 @@ const HelloWorld = () => {
     // 最後狀態需要更新回傳，將刪除傳遞給array
     // ...為擴展運算符號
     setToDoList([...deleteToDo]);
+    localStorage.setItem("toDoList", JSON.stringify(deleteToDo));
   };
   // 控制update按鈕的函式
   // 需求為按下update按鈕後
@@ -88,7 +100,7 @@ const HelloWorld = () => {
   };
 
 
-
+console.log('toDoList',toDoList)
   return (
     <div className="App">
       <div className="container">
@@ -105,7 +117,7 @@ const HelloWorld = () => {
           {/* 新增Add按鈕和修改Update的輸入框共用，UpdateId如果"有"返回"Update，否則返回Add*/}
           <button type="sumbit">{updateId ? "Update" : "Add"}</button>
         </form>
-        {/* 待辦清單顯示內容，t代表整個對象為輸入框內的inpuiToDo值 */}
+        {/* 待辦清單顯示內容，t代表整個對象為輸入框內的inputToDo值 */}
         <ul className="allToDoList">
           {toDoList.map((todo) => (
             <li className="singleTodoTask" key={todo.id}>
