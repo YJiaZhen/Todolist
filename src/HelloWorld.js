@@ -13,8 +13,17 @@ const HelloWorld = () => {
   useEffect(() => {
     console.log('here',Date.now)
     // 從localStorage中讀取待辦事項列表
-    const savedToDoList = JSON.parse(localStorage.getItem("toDoList"));
+    let savedToDoList
+    try {
+      savedToDoList = JSON.parse(localStorage.getItem("toDoList"));
+    } catch (error) {
+      console.log('error',error)
+      localStorage.setItem('toDoList', "[]")
+    }
+    // const savedToDoList = JSON.parse(localStorage.getItem("toDoList"));
+    console.log('savedToDoList: ', savedToDoList)
     if (savedToDoList) {
+      console.log('我來了')
       setToDoList(savedToDoList);
     }
   }, []);
