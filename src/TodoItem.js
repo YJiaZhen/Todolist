@@ -12,7 +12,7 @@ const TodoItem = ({ todo, onUpdate, onDelete }) => {
 
   return (
     <div className="singleTodoTask">
-      <span className="toDoText">{todo.inputToDo}</span>
+      <span className="toDoText">{todo.inputtodo}</span>
       <button type="button" onClick={handleUpdateClick}>
         Update
       </button>
