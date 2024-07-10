@@ -1,12 +1,13 @@
 const { Pool } = require('pg');
+require('dotenv').config();
 
 // 配置資料庫連接
 const pool = new Pool({
-  user: 'postgres', // 資料庫用戶名
-  host: 'localhost', // Docker 服務器名稱
-  database: 'todos', // 資料庫名稱
-  password: '920309', // 資料庫密碼
-  port: 5432, // 資料庫埠號（默認為 5432）
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: 5432,
   max: 5
 });
 
