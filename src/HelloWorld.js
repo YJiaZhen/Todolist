@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./HelloWorld.css";
 import TodoItem from "./TodoItem";
+const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
 const HelloWorld = () => {
   const [inputToDo, setInputToDo] = useState("");
@@ -8,7 +9,7 @@ const HelloWorld = () => {
   const [updateId, setUpdateId] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:5002/api/todos')
+    fetch(`${apiUrl}/api/todos`)
       .then(response => response.json())
       .then(data => setToDoList(data))
       .catch(error => console.error('獲取待辦事項失敗：', error));
@@ -22,7 +23,7 @@ const HelloWorld = () => {
     e.preventDefault();
     if (updateId) {
       try {
-        const response = await fetch(`http://localhost:5002/api/todos/${updateId}`, {
+        const response = await fetch(`${apiUrl}/api/todos/${updateId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ inputtodo: inputToDo }),
@@ -37,7 +38,7 @@ const HelloWorld = () => {
     } else {
       const newToDo = { inputtodo: inputToDo };
       try {
-        const response = await fetch('http://localhost:5002/api/todos', {
+        const response = await fetch(`${apiUrl}/api/todos`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newToDo),
@@ -53,7 +54,7 @@ const HelloWorld = () => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`http://localhost:5002/api/todos/${id}`, {
+      await fetch(`${apiUrl}/api/todos/${id}`, {
         method: 'DELETE',
       });
       setToDoList(toDoList.filter((todo) => todo.id !== id));
