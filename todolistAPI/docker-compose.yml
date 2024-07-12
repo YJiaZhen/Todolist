@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "920309"
+      POSTGRES_DB: "todos"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    ports:
+      - 5002:5002
+    environment:
+      - DB_USER=postgres
+      - DB_HOST=postgres_db
+      - DB_NAME=todos
+      - DB_PASSWORD=920309
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "luciayang0309@gmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "920309"
+    ports:
+      - "8888:80"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+
+
+
