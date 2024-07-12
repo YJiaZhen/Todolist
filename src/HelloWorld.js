@@ -9,7 +9,7 @@ const HelloWorld = () => {
   const [updateId, setUpdateId] = useState(0);
 
   useEffect(() => {
-    fetch(`${apiUrl}api/todos`)
+    fetch(`${apiUrl}`)
       .then(response => response.json())
       .then(data => setToDoList(data))
       .catch(error => console.error('獲取待辦事項失敗：', error));
@@ -23,7 +23,7 @@ const HelloWorld = () => {
     e.preventDefault();
     if (updateId) {
       try {
-        const response = await fetch(`${apiUrl}api/todos/${updateId}`, {
+        const response = await fetch(`${apiUrl}/${updateId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ inputtodo: inputToDo }),
@@ -38,7 +38,7 @@ const HelloWorld = () => {
     } else {
       const newToDo = { inputtodo: inputToDo };
       try {
-        const response = await fetch(`${apiUrl}api/todos`, {
+        const response = await fetch(`${apiUrl}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(newToDo),
@@ -54,7 +54,7 @@ const HelloWorld = () => {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`${apiUrl}api/todos/${id}`, {
+      await fetch(`${apiUrl}/${id}`, {
         method: 'DELETE',
       });
       setToDoList(toDoList.filter((todo) => todo.id !== id));
