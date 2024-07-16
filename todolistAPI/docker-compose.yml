@@ -13,19 +13,20 @@ services:
     ports:
       - "5432:5432"
   api:
+    image: yjz039/todoapi:v1
     container_name: api
-    build:
-      context: .
-      dockerfile: ./Dockerfile
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile
     restart: always
     ports:
       - 5002:5002
     environment:
       - DB_USER=postgres
       - DB_HOST=postgres_db
-      - DB_NAME=todos
+      - DB_NAME=postgres
       - DB_PASSWORD=920309
-
+    platform: "linux/amd64"   # 指定平台為 x86_64
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
@@ -36,9 +37,5 @@ services:
       - "8888:80"
     depends_on:
       - db
-
 volumes:
   postgres_data:
-
-
-
